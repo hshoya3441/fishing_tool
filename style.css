@@ -1,3 +1,4 @@
+/* 画面全体を背景として扱うために必須 */
 html, body {
     height: 100%;
     margin: 0;
@@ -7,14 +8,16 @@ html, body {
 body {
     font-family: Arial, sans-serif;
 
+    /* 背景画像設定 */
     background-image: url("background.jpg");
-    background-size: cover;        /* ← 画面いっぱいに自然に拡大 */
-    background-repeat: no-repeat;  /* ← 2枚目防止 */
-    background-position: center;   /* ← 中央に配置 */
-    background-attachment: fixed;  /* ← スクロールしても固定（任意） */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+
+    color: white;
 }
 
-
+/* ヘッダー */
 .header {
     display: flex;
     justify-content: space-between;
@@ -33,6 +36,7 @@ body {
     cursor: pointer;
 }
 
+/* メインコンテンツ */
 .container {
     text-align: center;
     margin-top: 150px;
@@ -43,6 +47,7 @@ h1 {
     margin-bottom: 40px;
 }
 
+/* ボタン（デフォルト：縦並び） */
 .mode-btn {
     display: block;
     width: 250px;
@@ -61,7 +66,22 @@ h1 {
     background: rgba(255, 255, 255, 0.3);
 }
 
-/* 左下の日時表示 */
+/* 横長画面（PC・タブレット）では横並びにしてサイズUP */
+@media screen and (min-aspect-ratio: 4/3) {
+    .container {
+        margin-top: 120px;
+    }
+
+    .mode-btn {
+        display: inline-block;
+        width: 300px;
+        margin: 20px 40px;
+        padding: 25px;
+        font-size: 26px;
+    }
+}
+
+/* 左下の日時＋バッテリー表示 */
 #datetime {
     position: fixed;
     bottom: 10px;
@@ -71,3 +91,4 @@ h1 {
     padding: 6px 12px;
     border-radius: 6px;
 }
+
