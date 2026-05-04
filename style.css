@@ -50,20 +50,24 @@ h1 {
 /* ボタン（デフォルト：縦並び） */
 .mode-btn {
     display: block;
-    width: 250px;
+    width: 260px;
     margin: 20px auto;
-    padding: 20px;
-    font-size: 22px;
+    padding: 22px;
+    font-size: 24px;
     cursor: pointer;
     border: none;
-    border-radius: 10px;
-    background: rgba(0, 0, 0, 0.5);
+    border-radius: 14px;
+
+    /* 新しいデザイン */
+    background: linear-gradient(135deg, rgba(0,0,0,0.6), rgba(40,40,40,0.6));
     color: white;
-    transition: 0.3s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    transition: 0.25s;
 }
 
 .mode-btn:hover {
-    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-4px);
+    background: rgba(255, 255, 255, 0.25);
 }
 
 /* 横長画面（PC・タブレット）では横並びにしてサイズUP */
@@ -74,10 +78,25 @@ h1 {
 
     .mode-btn {
         display: inline-block;
-        width: 300px;
-        margin: 20px 40px;
-        padding: 25px;
+        width: 320px;
+        margin: 20px 50px;
+        padding: 28px;
+        font-size: 28px;
+        border-radius: 18px;
+    }
+}
+
+/* スマホ画面（縦長）ではボタンを少し大きくして押しやすく */
+@media screen and (max-width: 600px) {
+    .mode-btn {
+        width: 80%;
+        padding: 26px;
         font-size: 26px;
+        border-radius: 16px;
+    }
+
+    h1 {
+        font-size: 32px;
     }
 }
 
@@ -87,8 +106,36 @@ h1 {
     bottom: 10px;
     left: 10px;
     font-size: 16px;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.45);
     padding: 6px 12px;
     border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
+/* バッテリーアイコン */
+.battery-icon {
+    width: 22px;
+    height: 12px;
+    border: 2px solid white;
+    border-radius: 3px;
+    position: relative;
+}
+
+.battery-icon::after {
+    content: "";
+    position: absolute;
+    right: -5px;
+    top: 3px;
+    width: 3px;
+    height: 6px;
+    background: white;
+    border-radius: 1px;
+}
+
+.battery-level {
+    height: 100%;
+    background: limegreen;
+    border-radius: 2px;
+}
