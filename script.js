@@ -27,8 +27,8 @@ document.getElementById("during-btn").addEventListener("click", () => {
     window.location.href = "During_Fishing.html";
 });
 
-// 日付と時刻のリアルタイム表示 (MM/DD/YYYY HH:MM:SS UTC±OO)
-function updateDateTime() {
+// 日付と時刻のリアルタイム表示 + バッテリー残量
+async function updateDateTime() {
     const dtEl = document.getElementById("datetime");
     const now = new Date();
 
@@ -46,7 +46,17 @@ function updateDateTime() {
     const sign = offsetMin <= 0 ? "+" : "-";
     const offsetStr = `UTC${sign}${String(offsetHour).padStart(2, "0")}`;
 
-    dtEl.textContent = `${MM}/${DD}/${YYYY}  ${HH}:${mm}:${SS} ${offsetStr}`;
+    // バッテリー残量取得（対応ブラウザのみ）
+    let batteryText = "";
+    try {
+        const battery = await navigator.getBattery();
+        const percent = Math.round(battery.level * 100);
+        batteryText = `   Battery: ${percent}%`;
+    } catch {
+        batteryText = "   Battery: N/A";
+    }
+
+    dtEl.textContent = `${MM}/${DD}/${YYYY}  ${HH}:${mm}:${SS} ${offsetStr}${batteryText}`;
 }
 
 setInterval(updateDateTime, 1000);
