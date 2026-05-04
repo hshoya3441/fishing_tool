@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Device Information</title>
+
     <script>
-        // トークンチェック（1回限り）
         const token = sessionStorage.getItem("device_token");
 
-        if (!token) {
+        if (!token || token.length < 20) {
             window.location.href = "index.html";
         } else {
-            // 1回使ったら削除（1回限り）
             sessionStorage.removeItem("device_token");
         }
     </script>
