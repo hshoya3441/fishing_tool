@@ -1,12 +1,17 @@
-body {
+html, body {
+    height: 100%;
     margin: 0;
     padding: 0;
+}
+
+body {
     font-family: Arial, sans-serif;
 
     background-image: url("background.jpg");
-    background-size: 100% 100%;   /* ← 画面に完全フィット */
-    background-repeat: no-repeat; /* ← 画像の2枚目を防ぐ */
-    background-position: center;
+    background-size: cover;        /* ← 画面いっぱいに自然に拡大 */
+    background-repeat: no-repeat;  /* ← 2枚目防止 */
+    background-position: center;   /* ← 中央に配置 */
+    background-attachment: fixed;  /* ← スクロールしても固定（任意） */
 }
 
 
