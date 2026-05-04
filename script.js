@@ -46,17 +46,23 @@ async function updateDateTime() {
     const sign = offsetMin <= 0 ? "+" : "-";
     const offsetStr = `UTC${sign}${String(offsetHour).padStart(2, "0")}`;
 
-    // バッテリー残量取得（対応ブラウザのみ）
-    let batteryText = "";
+    // バッテリー残量取得
+    let batteryPercent = "N/A";
+    let batteryLevelWidth = "0%";
+
     try {
         const battery = await navigator.getBattery();
-        const percent = Math.round(battery.level * 100);
-        batteryText = `   Battery: ${percent}%`;
-    } catch {
-        batteryText = "   Battery: N/A";
-    }
+        batteryPercent = Math.round(battery.level * 100);
+        batteryLevelWidth = batteryPercent + "%";
+    } catch {}
 
-    dtEl.textContent = `${MM}/${DD}/${YYYY}  ${HH}:${mm}:${SS} ${offsetStr}${batteryText}`;
+    dtEl.innerHTML = `
+        ${MM}/${DD}/${YYYY} ${HH}:${mm}:${SS} ${offsetStr}
+        <div class="battery-icon">
+            <div class="battery-level" style="width:${batteryLevelWidth}"></div>
+        </div>
+        <span>${batteryPercent}%</span>
+    `;
 }
 
 setInterval(updateDateTime, 1000);
