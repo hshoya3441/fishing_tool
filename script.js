@@ -14,9 +14,51 @@ window.addEventListener("online", updateNetworkStatus);
 window.addEventListener("offline", updateNetworkStatus);
 
 // Device Information ボタン
+// Device Information ボタン（パスワード認証付き）
 document.getElementById("device-info-btn").addEventListener("click", () => {
-    window.location.href = "Device_Info.html";
+    showPasswordPrompt();
 });
+
+// パスワードを難読化（簡易）
+const encryptedPassword = btoa("1511319uiw!");  // "MTUxMTMxOXVpdw=="
+
+// パスワード入力ポップアップ
+function showPasswordPrompt() {
+    const popup = document.createElement("div");
+    popup.className = "popup-overlay";
+    popup.innerHTML = `
+        <div class="popup-box">
+            <p>Enter Password</p>
+            <input type="password" id="pw-input" class="pw-input">
+            <div class="popup-buttons">
+                <button id="pw-ok">OK</button>
+                <button id="pw-cancel">Cancel</button>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(popup);
+
+    document.getElementById("pw-ok").onclick = () => {
+        const input = document.getElementById("pw-input").value;
+
+        if (btoa(input) === encryptedPassword) {
+            // 1回限りのトークン発行
+            const token = Math.random().toString(36).substring(2);
+            sessionStorage.setItem("device_token", token);
+
+            popup.remove();
+            window.location.href = "Device_Info.html";
+        } else {
+            alert("Incorrect password");
+        }
+    };
+
+    document.getElementById("pw-cancel").onclick = () => {
+        popup.remove();
+    };
+}
+
 
 // モード選択ボタン
 document.getElementById("before-btn").addEventListener("click", () => {
