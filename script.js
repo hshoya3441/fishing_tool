@@ -2,7 +2,7 @@ body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
-    background-image: url("background.jpg"); /* 必要に応じて差し替え */
+    background-image: url("https://duallife.anabuki-style.com/app/wp-content/uploads/2023/12/image1-5.jpg"); /* 必要に応じて差し替え */
     background-size: cover;
     background-position: center;
     color: white;
