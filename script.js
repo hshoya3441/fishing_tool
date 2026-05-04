@@ -49,14 +49,14 @@ async function updateDateTime() {
     // バッテリー残量取得
     let batteryPercent = "N/A";
     let batteryLevelWidth = "0%";
-    let batteryColor = "limegreen"; // デフォルト緑
+    let batteryColor = "limegreen";
 
     try {
         const battery = await navigator.getBattery();
         batteryPercent = Math.round(battery.level * 100);
         batteryLevelWidth = batteryPercent + "%";
 
-        // 色分け
+        // 色分岐（iPhone風）
         if (batteryPercent <= 10) {
             batteryColor = "red";
         } else if (batteryPercent <= 30) {
