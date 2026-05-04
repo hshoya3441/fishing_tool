@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Device Information</title>
+    <script>
+        // トークンチェック（1回限り）
+        const token = sessionStorage.getItem("device_token");
+
+        if (!token) {
+            window.location.href = "index.html";
+        } else {
+            // 1回使ったら削除（1回限り）
+            sessionStorage.removeItem("device_token");
+        }
+    </script>
+
+    <style>
+        body {
+            background: #111;
+            color: white;
+            font-family: Arial;
+            padding: 40px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Device Information</h1>
+    <p>This is a protected page.</p>
+</body>
+</html>
