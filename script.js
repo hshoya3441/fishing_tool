@@ -1,66 +1,53 @@
-body {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-    background-image: url("https://duallife.anabuki-style.com/app/wp-content/uploads/2023/12/image1-5.jpg"); /* 必要に応じて差し替え */
-    background-size: cover;
-    background-position: center;
-    color: white;
+// ネットワーク状態を判定して表示
+function updateNetworkStatus() {
+    const statusEl = document.getElementById("network-status");
+
+    if (navigator.onLine) {
+        statusEl.textContent = "Network Status: Online";
+    } else {
+        statusEl.textContent = "Network Status: Disconnected";
+    }
 }
 
-.header {
-    display: flex;
-    justify-content: space-between;
-    padding: 15px;
-    background: rgba(0, 0, 0, 0.4);
+updateNetworkStatus();
+window.addEventListener("online", updateNetworkStatus);
+window.addEventListener("offline", updateNetworkStatus);
+
+// Device Information ボタン
+document.getElementById("device-info-btn").addEventListener("click", () => {
+    window.location.href = "Device_Info.html";
+});
+
+// モード選択ボタン
+document.getElementById("before-btn").addEventListener("click", () => {
+    window.location.href = "Before_Fishing.html";
+});
+
+document.getElementById("during-btn").addEventListener("click", () => {
+    window.location.href = "During_Fishing.html";
+});
+
+// 日付と時刻のリアルタイム表示 (MM/DD/YYYY HH:MM:SS UTC±OO)
+function updateDateTime() {
+    const dtEl = document.getElementById("datetime");
+    const now = new Date();
+
+    const MM = String(now.getMonth() + 1).padStart(2, "0");
+    const DD = String(now.getDate()).padStart(2, "0");
+    const YYYY = now.getFullYear();
+
+    const HH = String(now.getHours()).padStart(2, "0");
+    const mm = String(now.getMinutes()).padStart(2, "0");
+    const SS = String(now.getSeconds()).padStart(2, "0");
+
+    // UTCオフセット取得（分 → 時間）
+    const offsetMin = now.getTimezoneOffset();
+    const offsetHour = Math.abs(offsetMin / 60);
+    const sign = offsetMin <= 0 ? "+" : "-";
+    const offsetStr = `UTC${sign}${String(offsetHour).padStart(2, "0")}`;
+
+    dtEl.textContent = `${MM}/${DD}/${YYYY}  ${HH}:${mm}:${SS} ${offsetStr}`;
 }
 
-#network-status {
-    font-size: 18px;
-    font-weight: bold;
-}
-
-#device-info-btn {
-    padding: 8px 15px;
-    font-size: 14px;
-    cursor: pointer;
-}
-
-.container {
-    text-align: center;
-    margin-top: 150px;
-}
-
-h1 {
-    font-size: 40px;
-    margin-bottom: 40px;
-}
-
-.mode-btn {
-    display: block;
-    width: 250px;
-    margin: 20px auto;
-    padding: 20px;
-    font-size: 22px;
-    cursor: pointer;
-    border: none;
-    border-radius: 10px;
-    background: rgba(0, 0, 0, 0.5);
-    color: white;
-    transition: 0.3s;
-}
-
-.mode-btn:hover {
-    background: rgba(255, 255, 255, 0.3);
-}
-
-/* 左下の日時表示 */
-#datetime {
-    position: fixed;
-    bottom: 10px;
-    left: 10px;
-    font-size: 16px;
-    background: rgba(0, 0, 0, 0.4);
-    padding: 6px 12px;
-    border-radius: 6px;
-}
+setInterval(updateDateTime, 1000);
+updateDateTime();
