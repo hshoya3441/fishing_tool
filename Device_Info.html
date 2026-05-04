@@ -1,164 +1,198 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <title>Device Information</title>
+<meta charset="UTF-8">
+<title>Device Information</title>
 
-    <script>
-        const token = sessionStorage.getItem("device_token");
+<style>
+/* ===== 全体レイアウト ===== */
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-        if (!token || token.length < 20) {
-            window.location.href = "index.html";
-        } else {
-            sessionStorage.removeItem("device_token");
-        }
-    </script>
+    font-family: Arial, sans-serif;
+    background-image: url("background.jpg");
+    background-size: cover;
+    background-position: center;
+    color: white;
+}
 
-    <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
+/* ===== 戻るボタン ===== */
+.back-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+    cursor: pointer;
+    user-select: none;
+}
 
-        body {
-            font-family: Arial, sans-serif;
-            background-image: url("background.jpg");
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-position: center;
-            color: white;
-            padding: 40px;
-        }
+/* ===== メインボックス ===== */
+.info-box {
+    background: rgba(0,0,0,0.55);
+    padding: 30px 40px;
+    border-radius: 15px;
+    text-align: center;
+    max-width: 90%;
+    width: 500px;
+}
 
-        .info-box {
-            background: rgba(0,0,0,0.5);
-            padding: 20px;
-            border-radius: 12px;
-            max-width: 600px;
-        }
+/* ===== 文字サイズ ===== */
+h1 {
+    font-size: 28px;
+    margin-bottom: 20px;
+}
 
-        h1 {
-            margin-bottom: 20px;
-        }
+p {
+    font-size: 20px;
+    margin: 10px 0;
+    word-break: break-word;
+}
 
-        p {
-            font-size: 18px;
-            margin: 8px 0;
-        }
-    </style>
+/* ===== スマホ最適化 ===== */
+@media (max-width: 600px) {
+    .info-box {
+        width: 90%;
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 22px;
+    }
+
+    p {
+        font-size: 16px;
+    }
+
+    .back-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+    }
+}
+</style>
 </head>
+
 <body>
 
-<h1>Device Information</h1>
+<!-- 戻るボタン -->
+<div class="back-btn" onclick="location.href='index.html'">←</div>
 
 <div class="info-box">
+    <h1>Device Info</h1>
+
     <p id="os"></p>
-    <p id="browser"></p>
     <p id="screen"></p>
     <p id="lang"></p>
     <p id="timezone"></p>
+    <p id="network"></p>
     <p id="battery"></p>
-    <p id="online"></p>
 
-    <!-- 追加 -->
+    <hr style="opacity:0.3">
+
     <p id="ip"></p>
     <p id="location"></p>
     <p id="isp"></p>
     <p id="vpn"></p>
+
+    <hr style="opacity:0.3">
+
     <p id="gps"></p>
     <p id="search"></p>
 </div>
 
 <script>
-    document.getElementById("os").textContent =
-        "OS: " + navigator.platform;
 
-    document.getElementById("browser").textContent =
-        "Browser: " + navigator.userAgent;
+/* ===== OS（簡略版） ===== */
+let os = "Unknown";
+if (navigator.userAgent.includes("Win")) os = "Windows";
+else if (navigator.userAgent.includes("Mac")) os = "macOS";
+else if (navigator.userAgent.includes("Android")) os = "Android";
+else if (navigator.userAgent.includes("iPhone")) os = "iOS";
 
-    document.getElementById("screen").textContent =
-        "Screen Size: " + window.innerWidth + " x " + window.innerHeight;
+document.getElementById("os").textContent = "OS: " + os;
 
-    document.getElementById("lang").textContent =
-        "Language: " + navigator.language;
+/* ===== ブラウザ（バージョンなし） ===== */
+document.getElementById("network").textContent =
+    "Browser: " + navigator.userAgent.split(" ")[0];
 
-    document.getElementById("timezone").textContent =
-        "Time Zone: " + Intl.DateTimeFormat().resolvedOptions().timeZone;
+/* ===== 画面 ===== */
+document.getElementById("screen").textContent =
+    "Screen: " + window.innerWidth + " x " + window.innerHeight;
 
-    document.getElementById("online").textContent =
-        "Network: " + (navigator.onLine ? "Online" : "Offline");
+/* ===== 言語 ===== */
+document.getElementById("lang").textContent =
+    "Language: " + navigator.language;
 
-    navigator.getBattery().then(b => {
-        document.getElementById("battery").textContent =
-            "Battery: " + Math.round(b.level * 100) + "%";
-    });
+/* ===== タイムゾーン ===== */
+document.getElementById("timezone").textContent =
+    "Timezone: " + Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-    // =========================
-    // IP / Location / ISP
-    // =========================
-    fetch("https://ipinfo.io/json?token=YOUR_TOKEN_HERE")
-        .then(res => res.json())
-        .then(data => {
+/* ===== バッテリー ===== */
+navigator.getBattery?.then(b => {
+    document.getElementById("battery").textContent =
+        "Battery: " + Math.round(b.level * 100) + "%";
+});
 
-            document.getElementById("ip").textContent =
-                "IP: " + data.ip;
+/* ===== IP情報 ===== */
+fetch("https://ipinfo.io/json?token=YOUR_TOKEN_HERE")
+.then(r => r.json())
+.then(d => {
 
-            document.getElementById("location").textContent =
-                "Location: " + data.city + ", " + data.region + ", " + data.country;
+    document.getElementById("ip").textContent =
+        "IP: " + d.ip;
 
-            document.getElementById("isp").textContent =
-                "ISP: " + data.org;
+    document.getElementById("location").textContent =
+        "Location: " + d.city + ", " + d.country;
 
-            // VPN / Proxy 推定（簡易）
-            let vpn = "Not detected (not guaranteed)";
+    document.getElementById("isp").textContent =
+        "ISP: " + d.org;
 
-            if (data.privacy &&
-                (data.privacy.vpn || data.privacy.proxy || data.privacy.tor)) {
-                vpn = "Likely VPN/Proxy/Tor";
-            }
-
-            document.getElementById("vpn").textContent =
-                "VPN/Proxy: " + vpn;
-        })
-        .catch(() => {
-            document.getElementById("ip").textContent =
-                "IP: Failed to fetch";
-        });
-
-    // =========================
-    // GPS Location
-    // =========================
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            pos => {
-                document.getElementById("gps").textContent =
-                    "GPS: " + pos.coords.latitude + ", " + pos.coords.longitude;
-            },
-            err => {
-                document.getElementById("gps").textContent =
-                    "GPS: Permission denied";
-            }
-        );
-    } else {
-        document.getElementById("gps").textContent =
-            "GPS: Not supported";
+    let vpn = "Not detected";
+    if (d.privacy && (d.privacy.vpn || d.privacy.proxy || d.privacy.tor)) {
+        vpn = "Possible VPN/Proxy";
     }
 
-    // =========================
-    // Search Engine detection (referrer)
-    // =========================
-    let ref = document.referrer;
-    let searchEngine = "Unknown";
+    document.getElementById("vpn").textContent =
+        "VPN: " + vpn;
+})
+.catch(() => {
+    document.getElementById("ip").textContent = "IP: error";
+});
 
-    if (ref.includes("google")) searchEngine = "Google";
-    else if (ref.includes("bing")) searchEngine = "Bing";
-    else if (ref.includes("yahoo")) searchEngine = "Yahoo";
-    else if (ref.includes("duckduckgo")) searchEngine = "DuckDuckGo";
-    else if (ref) searchEngine = "Other referrer";
+/* ===== GPS ===== */
+navigator.geolocation?.getCurrentPosition(
+pos => {
+    document.getElementById("gps").textContent =
+        "GPS: " + pos.coords.latitude.toFixed(4) + ", " +
+        pos.coords.longitude.toFixed(4);
+},
+() => {
+    document.getElementById("gps").textContent =
+        "GPS: denied";
+});
 
-    document.getElementById("search").textContent =
-        "Search Engine / Referrer: " + searchEngine;
+/* ===== 検索エンジン（リファラ） ===== */
+let ref = document.referrer;
+let search = "Unknown";
+
+if (ref.includes("google")) search = "Google";
+else if (ref.includes("bing")) search = "Bing";
+else if (ref.includes("yahoo")) search = "Yahoo";
+else if (ref.includes("duckduckgo")) search = "DuckDuckGo";
+
+document.getElementById("search").textContent =
+    "Search: " + search;
 
 </script>
 
