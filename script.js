@@ -23,9 +23,28 @@ document.getElementById("before-btn").addEventListener("click", () => {
     window.location.href = "Before_Fishing.html";
 });
 
-document.getElementById("during-btn").addEventListener("click", () => {
-    window.location.href = "During_Fishing.html";
+// モード選択ボタン（During Fishing）
+document.getElementById("during-btn").addEventListener("click", async () => {
+
+    let batteryPercent = 100;
+
+    try {
+        const battery = await navigator.getBattery();
+        batteryPercent = Math.round(battery.level * 100);
+    } catch {
+        // バッテリー取得できない場合はそのまま遷移
+        window.location.href = "During_Fishing.html";
+        return;
+    }
+
+    // 50% 以下なら警告ポップアップ
+    if (batteryPercent <= 50) {
+        showBatteryWarning();
+    } else {
+        window.location.href = "During_Fishing.html";
+    }
 });
+
 
 // 日付と時刻のリアルタイム表示 + バッテリー残量
 async function updateDateTime() {
@@ -74,6 +93,32 @@ async function updateDateTime() {
         <span>${batteryPercent}%</span>
     `;
 }
+
+function showBatteryWarning() {
+    const popup = document.createElement("div");
+    popup.className = "popup-overlay";
+    popup.innerHTML = `
+        <div class="popup-box">
+            <p>Battery is low, it may run out while you are fishing.<br>Do you want to continue?</p>
+            <div class="popup-buttons">
+                <button id="popup-yes">Yes</button>
+                <button id="popup-no">No</button>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(popup);
+
+    document.getElementById("popup-yes").onclick = () => {
+        popup.remove();
+        window.location.href = "During_Fishing.html";
+    };
+
+    document.getElementById("popup-no").onclick = () => {
+        popup.remove();
+    };
+}
+
 
 setInterval(updateDateTime, 1000);
 updateDateTime();
