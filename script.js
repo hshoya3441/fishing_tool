@@ -49,17 +49,27 @@ async function updateDateTime() {
     // バッテリー残量取得
     let batteryPercent = "N/A";
     let batteryLevelWidth = "0%";
+    let batteryColor = "limegreen"; // デフォルト緑
 
     try {
         const battery = await navigator.getBattery();
         batteryPercent = Math.round(battery.level * 100);
         batteryLevelWidth = batteryPercent + "%";
+
+        // 色分け
+        if (batteryPercent <= 10) {
+            batteryColor = "red";
+        } else if (batteryPercent <= 30) {
+            batteryColor = "yellow";
+        } else {
+            batteryColor = "limegreen";
+        }
     } catch {}
 
     dtEl.innerHTML = `
         ${MM}/${DD}/${YYYY} ${HH}:${mm}:${SS} ${offsetStr}
         <div class="battery-icon">
-            <div class="battery-level" style="width:${batteryLevelWidth}"></div>
+            <div class="battery-level" style="width:${batteryLevelWidth}; background:${batteryColor};"></div>
         </div>
         <span>${batteryPercent}%</span>
     `;
