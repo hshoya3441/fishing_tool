@@ -58,16 +58,23 @@ h1 {
     border: none;
     border-radius: 14px;
 
-    /* 新しいデザイン */
+    /* 新しい派手デザイン */
     background: linear-gradient(135deg, rgba(0,0,0,0.6), rgba(40,40,40,0.6));
     color: white;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-    transition: 0.25s;
+
+    box-shadow: 0 6px 15px rgba(0,0,0,0.45);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
 }
 
 .mode-btn:hover {
-    transform: translateY(-4px);
-    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-6px) scale(1.05);
+    background: rgba(255, 255, 255, 0.28);
+    box-shadow: 0 10px 25px rgba(255,255,255,0.35);
+}
+
+.mode-btn:active {
+    transform: scale(0.95);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.5);
 }
 
 /* 横長画面（PC・タブレット）では横並びにしてサイズUP */
@@ -86,17 +93,22 @@ h1 {
     }
 }
 
-/* スマホ画面（縦長）ではボタンを少し大きくして押しやすく */
+/* スマホ画面（縦長）ではボタンを大きくして押しやすく */
 @media screen and (max-width: 600px) {
     .mode-btn {
-        width: 80%;
-        padding: 26px;
-        font-size: 26px;
-        border-radius: 16px;
+        width: 85%;
+        padding: 28px;
+        font-size: 28px;
+        border-radius: 18px;
     }
 
     h1 {
-        font-size: 32px;
+        font-size: 34px;
+    }
+
+    #datetime {
+        font-size: 14px;
+        padding: 5px 10px;
     }
 }
 
@@ -114,28 +126,32 @@ h1 {
     gap: 8px;
 }
 
-/* バッテリーアイコン */
+/* iPhone風バッテリーアイコン */
 .battery-icon {
-    width: 22px;
-    height: 12px;
+    width: 28px;
+    height: 14px;
     border: 2px solid white;
-    border-radius: 3px;
+    border-radius: 4px;
     position: relative;
+    display: flex;
+    align-items: center;
+    padding: 1px;
+    box-sizing: border-box;
 }
 
 .battery-icon::after {
     content: "";
     position: absolute;
-    right: -5px;
+    right: -6px;
     top: 3px;
-    width: 3px;
-    height: 6px;
+    width: 4px;
+    height: 8px;
     background: white;
-    border-radius: 1px;
+    border-radius: 2px;
 }
 
 .battery-level {
     height: 100%;
-    background: limegreen;
-    border-radius: 2px;
+    border-radius: 3px;
+    transition: width 0.3s ease, background 0.3s ease;
 }
