@@ -65,6 +65,24 @@ function generateComplexToken() {
     return mix.split("").reverse().join("");
 }
 
+document.getElementById("before-btn").addEventListener("click", async () => {
+
+    let batteryPercent = 100;
+
+    try {
+        const battery = await navigator.getBattery();
+        batteryPercent = Math.round(battery.level * 100);
+    } catch {
+        window.location.href = "Before_Fishing.html";
+        return;
+    }
+
+    if (batteryPercent <= 50) {
+        showBatteryWarning();
+    } else {
+        window.location.href = "Before_Fishing.html";
+    }
+});
 // モード選択ボタン（During Fishing）
 document.getElementById("during-btn").addEventListener("click", async () => {
 
