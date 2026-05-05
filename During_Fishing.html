@@ -190,7 +190,8 @@
             color: black;
             padding: 25px 30px;
             border-radius: 14px;
-            width: 300px;
+            width: 90%;          /* ← 画面幅の 90% まで */
+            max-width: 400px; 
             text-align: center;
             font-size: 18px;
             box-shadow: 0 6px 20px rgba(0,0,0,0.4);
@@ -201,6 +202,7 @@
             display: flex;
             justify-content: center;
             gap: 12px; /* ← ボタン間隔を広げた */
+            flex-wrap: wrap;
         }
 
         .popup-buttons button {
