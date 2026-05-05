@@ -90,7 +90,7 @@
             .two-column {
                 display: flex;
                 justify-content: center;
-                gap: 40px;
+                gap: 80px;   /* ← ボタン間隔広げた */
                 margin-bottom: 30px;
             }
 
@@ -106,12 +106,11 @@
         @media screen and (max-width: 600px) {
 
             .menu-btn {
-                width: 500px;
-                max-width: 95%;
+                width: 95%;
                 padding: 32px;
                 font-size: 30px;
                 border-radius: 20px;
-                margin: 22px auto;
+                margin: 30px auto;
             }
 
             h1 {
@@ -124,7 +123,7 @@
 
             .two-column .menu-btn {
                 width: 95%;
-                margin: 22px auto;
+                margin: 30px auto;
             }
         }
 
@@ -200,8 +199,8 @@
         .popup-buttons {
             margin-top: 20px;
             display: flex;
-            justify-content: space-around;
-            gap: 12px; 
+            justify-content: center;
+            gap: 12px; /* ← ボタン間隔を広げた */
         }
 
         .popup-buttons button {
@@ -211,6 +210,7 @@
             border-radius: 10px;
             cursor: pointer;
             transition: 0.2s;
+            margin: 0 4px;
         }
 
         .popup-buttons button:hover {
@@ -220,6 +220,25 @@
         .apple-btn { background: #007aff; color: white; }
         .google-btn { background: #34a853; color: white; }
         .cancel-btn { background: #d9534f; color: white; }
+
+        /* ====== Play Music ボタン ====== */
+        #play-music-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.55);
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 18px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            transition: 0.25s;
+        }
+
+        #play-music-btn:hover {
+            transform: scale(1.08);
+            background: rgba(255,255,255,0.25);
+        }
 
     </style>
 </head>
@@ -257,6 +276,9 @@
             <button class="menu-btn" onclick="uploadFishing()">Upload your Fishing</button>
         </div>
     </div>
+
+    <!-- ====== Play Music ボタン ====== -->
+    <div id="play-music-btn" onclick="openMusicPopup()">Play Music</div>
 
     <!-- ====== 日時＋バッテリー ====== -->
     <div id="datetime"></div>
@@ -341,9 +363,7 @@
                 window.location.href = "https://maps.google.com/";
             };
 
-            document.getElementById("cancel").onclick = () => {
-                popup.remove();
-            };
+            document.getElementById("cancel").onclick = () => popup.remove();
         }
 
         /* ====== 7: Upload your Fishing ====== */
@@ -368,8 +388,66 @@
                 window.location.href = "Upload_Fishing.html";
             }
         }
+
+        /* ====== Play Music ポップアップ ====== */
+        function openMusicPopup() {
+            const popup = document.createElement("div");
+            popup.className = "popup-overlay";
+
+            popup.innerHTML = `
+                <div class="popup-box">
+                    <p>Which music app do you want to open?</p>
+                    <div class="popup-buttons">
+                        <button class="apple-btn" id="rakuten">Rakuten Music</button>
+                        <button class="google-btn" id="spotify">Spotify</button>
+                        <button class="google-btn" id="youtube">YouTube</button>
+                        <button class="cancel-btn" id="cancel-music">Cancel</button>
+                    </div>
+                </div>
+            `;
+
+            document.body.appendChild(popup);
+
+            document.getElementById("rakuten").onclick = () => handleMusicApp("https://music.rakuten.co.jp/", popup);
+            document.getElementById("spotify").onclick = () => handleMusicApp("https://open.spotify.com/", popup);
+            document.getElementById("youtube").onclick = () => handleMusicApp("https://youtube.com/", popup);
+
+            document.getElementById("cancel-music").onclick = () => popup.remove();
+        }
+
+        /* ====== オフライン時の警告 ====== */
+        function handleMusicApp(url, parentPopup) {
+            if (!navigator.onLine) {
+                parentPopup.remove();
+
+                const warn = document.createElement("div");
+                warn.className = "popup-overlay";
+
+                warn.innerHTML = `
+                    <div class="popup-box">
+                        <p>This device is offline.<br>If you didn't download music, it can't play music</p>
+                        <div class="popup-buttons">
+                            <button class="apple-btn" id="ok-music">OK</button>
+                            <button class="cancel-btn" id="cancel-music2">Cancel</button>
+                        </div>
+                    </div>
+                `;
+
+                document.body.appendChild(warn);
+
+                document.getElementById("ok-music").onclick = () => {
+                    warn.remove();
+                    window.location.href = url;
+                };
+
+                document.getElementById("cancel-music2").onclick = () => warn.remove();
+
+            } else {
+                parentPopup.remove();
+                window.location.href = url;
+            }
+        }
     </script>
 
 </body>
 </html>
-
