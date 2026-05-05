@@ -53,7 +53,7 @@
         /* ====== ボタン（共通デザイン） ====== */
         .menu-btn {
             display: block;
-            width: 1000px;
+            width: 500px;
             max-width: 90%;
             margin: 18px auto;
             padding: 22px;
@@ -106,10 +106,10 @@
         @media screen and (max-width: 600px) {
 
             .menu-btn {
-                width: 95%;          /* ← 画面いっぱい */
-                padding: 32px;       /* ← 高さアップ */
-                font-size: 30px;     /* ← 文字大きく */
-                border-radius: 20px; /* ← 角丸も大きく */
+                width: 95%;
+                padding: 32px;
+                font-size: 30px;
+                border-radius: 20px;
                 margin: 22px auto;
             }
 
@@ -118,7 +118,7 @@
             }
 
             .two-column {
-                display: block;      /* ← 全部縦並び */
+                display: block;
             }
 
             .two-column .menu-btn {
@@ -170,6 +170,55 @@
             border-radius: 3px;
             transition: width 0.3s ease, background 0.3s ease;
         }
+
+        /* ====== ポップアップ ====== */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.55);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+
+        .popup-box {
+            background: rgba(255,255,255,0.95);
+            color: black;
+            padding: 25px 30px;
+            border-radius: 14px;
+            width: 300px;
+            text-align: center;
+            font-size: 18px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+
+        .popup-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .popup-buttons button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .popup-buttons button:hover {
+            transform: scale(1.08);
+        }
+
+        .apple-btn { background: #007aff; color: white; }
+        .google-btn { background: #34a853; color: white; }
+        .cancel-btn { background: #d9534f; color: white; }
+
     </style>
 </head>
 
@@ -185,25 +234,25 @@
     <div class="container">
         <h1>During Fishing</h1>
 
-        <!-- 1個だけの行 -->
+        <!-- 1個目 -->
         <div class="single-row">
-            <button class="menu-btn">Detect type of fish</button>
+            <button class="menu-btn" onclick="location.href='Detect_Fish.html'">Detect Fish</button>
         </div>
 
         <!-- 2列 × 3段 -->
         <div class="two-column">
-            <button class="menu-btn">Open offline map</button>
-            <button class="menu-btn">Fish Search</button>
+            <button class="menu-btn" onclick="location.href='Fish_Search.html'">Fish Search</button>
+            <button class="menu-btn" onclick="location.href='Fishing_Map.html'">Fishing Map</button>
         </div>
 
         <div class="two-column">
-            <button class="menu-btn">Fishing Map</button>
-            <button class="menu-btn">Fishing Guide</button>
+            <button class="menu-btn" onclick="location.href='Fishing_Guide.html'">Fishing Guide</button>
+            <button class="menu-btn" onclick="location.href='Fishing_Record.html'">Fishing Record</button>
         </div>
 
         <div class="two-column">
-            <button class="menu-btn">Open offline map</button>
-            <button class="menu-btn">Open offline map</button>
+            <button class="menu-btn" onclick="openMapPopup()">Open Map</button>
+            <button class="menu-btn" onclick="uploadFishing()">Upload your Fishing</button>
         </div>
     </div>
 
@@ -261,7 +310,64 @@
 
         setInterval(updateDateTime, 1000);
         updateDateTime();
+
+        /* ====== 6: Open Map ポップアップ ====== */
+        function openMapPopup() {
+            const popup = document.createElement("div");
+            popup.className = "popup-overlay";
+
+            popup.innerHTML = `
+                <div class="popup-box">
+                    <p>Which app do you want to open?</p>
+                    <div class="popup-buttons">
+                        <button class="apple-btn" id="apple">Apple Maps</button>
+                        <button class="google-btn" id="google">Google Maps</button>
+                        <button class="cancel-btn" id="cancel">Cancel</button>
+                    </div>
+                </div>
+            `;
+
+            document.body.appendChild(popup);
+
+            document.getElementById("apple").onclick = () => {
+                popup.remove();
+                window.location.href = "https://maps.apple.com/";
+            };
+
+            document.getElementById("google").onclick = () => {
+                popup.remove();
+                window.location.href = "https://maps.google.com/";
+            };
+
+            document.getElementById("cancel").onclick = () => {
+                popup.remove();
+            };
+        }
+
+        /* ====== 7: Upload your Fishing ====== */
+        function uploadFishing() {
+            if (!navigator.onLine) {
+                const popup = document.createElement("div");
+                popup.className = "popup-overlay";
+
+                popup.innerHTML = `
+                    <div class="popup-box">
+                        <p>Your device is offline, so you can't</p>
+                        <div class="popup-buttons">
+                            <button class="cancel-btn" id="ok">OK</button>
+                        </div>
+                    </div>
+                `;
+
+                document.body.appendChild(popup);
+
+                document.getElementById("ok").onclick = () => popup.remove();
+            } else {
+                window.location.href = "Upload_Fishing.html";
+            }
+        }
     </script>
 
 </body>
 </html>
+
