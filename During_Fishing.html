@@ -5,7 +5,7 @@
     <title>During Fishing</title>
 
     <style>
-        /* ====== 背景・基本設定（index と同じ） ====== */
+        /* ====== 背景・基本設定 ====== */
         html, body {
             height: 100%;
             margin: 0;
@@ -50,7 +50,7 @@
             margin-bottom: 40px;
         }
 
-        /* ====== ボタン（index と同じデザイン） ====== */
+        /* ====== ボタン（共通デザイン） ====== */
         .menu-btn {
             display: block;
             width: 500px;
@@ -102,12 +102,15 @@
             }
         }
 
-        /* ====== スマホ（全部縦並び） ====== */
+        /* ====== スマホ（画面いっぱいの大きいボタン） ====== */
         @media screen and (max-width: 600px) {
+
             .menu-btn {
-                width: 90%;
-                padding: 26px;
-                font-size: 26px;
+                width: 95%;          /* ← 画面いっぱい */
+                padding: 32px;       /* ← 高さアップ */
+                font-size: 30px;     /* ← 文字大きく */
+                border-radius: 20px; /* ← 角丸も大きく */
+                margin: 22px auto;
             }
 
             h1 {
@@ -115,12 +118,12 @@
             }
 
             .two-column {
-                display: block;
+                display: block;      /* ← 全部縦並び */
             }
 
             .two-column .menu-btn {
-                width: 90%;
-                margin: 18px auto;
+                width: 95%;
+                margin: 22px auto;
             }
         }
 
