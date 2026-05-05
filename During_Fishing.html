@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>During Fishing</title>
+
+    <style>
+        /* ====== 背景・基本設定（index.html と同じ） ====== */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url("background.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            color: white;
+        }
+
+        /* ====== ヘッダー ====== */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        #network-status {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .back-btn {
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        /* ====== メインコンテンツ ====== */
+        .container {
+            text-align: center;
+            margin-top: 80px;
+        }
+
+        h1 {
+            font-size: 40px;
+            margin-bottom: 40px;
+        }
+
+        /* ====== ボタン（index と同じデザイン） ====== */
+        .menu-btn {
+            display: block;
+            width: 260px;
+            margin: 20px auto;
+            padding: 22px;
+            font-size: 24px;
+            cursor: pointer;
+            border: none;
+            border-radius: 14px;
+
+            background: linear-gradient(135deg, rgba(0,0,0,0.6), rgba(40,40,40,0.6));
+            color: white;
+
+            box-shadow: 0 6px 15px rgba(0,0,0,0.45);
+            transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+        }
+
+        .menu-btn:hover {
+            transform: translateY(-6px) scale(1.05);
+            background: rgba(255, 255, 255, 0.28);
+            box-shadow: 0 10px 25px rgba(255,255,255,0.35);
+        }
+
+        .menu-btn:active {
+            transform: scale(0.95);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.5);
+        }
+
+        /* ====== PC（横長）では横並び ====== */
+        @media screen and (min-aspect-ratio: 4/3) {
+            .button-row {
+                display: flex;
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 40px;
+            }
+
+            .menu-btn {
+                width: 300px;
+                padding: 26px;
+                font-size: 26px;
+            }
+        }
+
+        /* ====== スマホ（縦長）は縦並び ====== */
+        @media screen and (max-width: 600px) {
+            .menu-btn {
+                width: 85%;
+                padding: 28px;
+                font-size: 28px;
+                border-radius: 18px;
+            }
+
+            h1 {
+                font-size: 34px;
+            }
+        }
+
+        /* ====== 日時＋バッテリー ====== */
+        #datetime {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            font-size: 16px;
+            background: rgba(0, 0, 0, 0.45);
+            padding: 6px 12px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* iPhone風バッテリー */
+        .battery-icon {
+            width: 28px;
+            height: 14px;
+            border: 2px solid white;
+            border-radius: 4px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding: 1px;
+            box-sizing: border-box;
+        }
+
+        .battery-icon::after {
+            content: "";
+            position: absolute;
+            right: -6px;
+            top: 3px;
+            width: 4px;
+            height: 8px;
+            background: white;
+            border-radius: 2px;
+        }
+
+        .battery-level {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.3s ease, background 0.3s ease;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ====== ヘッダー ====== -->
+    <div class="header">
+        <div class="back-btn" onclick="window.location.href='index.html'">← Home</div>
+        <div id="network-status">Network Status: Checking...</div>
+    </div>
+
+    <!-- ====== メイン ====== -->
+    <div class="container">
+        <h1>During Fishing</h1>
+
+        <div class="button-row">
+            <button class="menu-btn">Detect type of fish</button>
+            <button class="menu-btn">Open offline map</button>
+            <button class="menu-btn">Fish Search</button>
+            <button class="menu-btn">Fishing Map</button>
+            <button class="menu-btn">Fishing Guide</button>
+            <button class="menu-btn">Open offline map</button>
+            <button class="menu-btn">Open offline map</button>
+        </div>
+    </div>
+
+    <!-- ====== 日時＋バッテリー ====== -->
+    <div id="datetime"></div>
+
+    <script>
+        /* ====== ネットワーク状態 ====== */
+        function updateNetworkStatus() {
+            const el = document.getElementById("network-status");
+            el.textContent = navigator.onLine ? "Network Status: Online" : "Network Status: Offline";
+        }
+        updateNetworkStatus();
+        window.addEventListener("online", updateNetworkStatus);
+        window.addEventListener("offline", updateNetworkStatus);
+
+        /* ====== 日時＋バッテリー ====== */
+        async function updateDateTime() {
+            const dtEl = document.getElementById("datetime");
+            const now = new Date();
+
+            const MM = String(now.getMonth() + 1).padStart(2, "0");
+            const DD = String(now.getDate()).padStart(2, "0");
+            const YYYY = now.getFullYear();
+            const HH = String(now.getHours()).padStart(2, "0");
+            const mm = String(now.getMinutes()).padStart(2, "0");
+            const SS = String(now.getSeconds()).padStart(2, "0");
+
+            const offsetMin = now.getTimezoneOffset();
+            const offsetHour = Math.abs(offsetMin / 60);
+            const sign = offsetMin <= 0 ? "+" : "-";
+            const offsetStr = `UTC${sign}${String(offsetHour).padStart(2, "0")}`;
+
+            let batteryPercent = "N/A";
+            let batteryWidth = "0%";
+            let batteryColor = "limegreen";
+
+            try {
+                const battery = await navigator.getBattery();
+                batteryPercent = Math.round(battery.level * 100);
+                batteryWidth = batteryPercent + "%";
+
+                if (batteryPercent <= 10) batteryColor = "red";
+                else if (batteryPercent <= 30) batteryColor = "yellow";
+            } catch {}
+
+            dtEl.innerHTML = `
+                ${MM}/${DD}/${YYYY} ${HH}:${mm}:${SS} ${offsetStr}
+                <div class="battery-icon">
+                    <div class="battery-level" style="width:${batteryWidth}; background:${batteryColor};"></div>
+                </div>
+                <span>${batteryPercent}%</span>
+            `;
+        }
+
+        setInterval(updateDateTime, 1000);
+        updateDateTime();
+    </script>
+
+</body>
+</html>
